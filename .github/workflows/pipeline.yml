@@ -1,0 +1,22 @@
+name: Deployment Pipeline
+
+on:
+  push:
+    branches:
+      - devs
+
+jobs:
+   deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 14
+      - name: Install Dependencies
+        run: npm install
+      - name: Start EsLint
+        run: npm run eslint
+
