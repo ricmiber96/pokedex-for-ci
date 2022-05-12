@@ -1,49 +1,49 @@
-name: Deployment Pipeline
+# name: Deployment Pipeline
 
-on:
-  push:
-    branches: [devs]
-  pull_request:
-    branches: [devs]
-    types: [opened,synchronize]
+# on:
+#   push:
+#     branches: [devs]
+#   pull_request:
+#     branches: [devs]
+#     types: [opened,synchronize]
 
-jobs:
-   deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Cancel Previous Redundance Builds
-        uses: styfle/cancel-workflow-action@0.9.1
-        with:
-          access_token: $ {{github.token}}
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 14
-      - name: Install Dependencies
-        # run: npm install --no-audit --no-fund --no-optional
-        run: npm ci
-      - name: Start EsLint
-        run: npm run eslint
-      - name: Build project
-        run: npm run build
-      - name: Run Tests
-        run: npm run test
-      - name: E2E Tests
-        uses: cypress-io/github-action@v2
-        with:
-          command: npm run test:e2e
-          start: npm run start-test
-          wait-on: http://localhost:5000
-      - name: Deploy to Heroku
-        if: ${{ github.event_name == 'push'}}
-        uses: akhileshns/heroku-deploy@v3.12.12
-        with:
-          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-          heroku_app_name: ${{secrets.HEROKU_APP}}
-          heroku_email: ${{secrets.HEROKU_API_EMAIL}}
-          healthcheck: "https://${{secrets.HEROKU_APP}}.herokuapp.com/health"
-          rollbackonhealthcheckfailed: true
+# jobs:
+#    deploy:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Cancel Previous Redundance Builds
+#         uses: styfle/cancel-workflow-action@0.9.1
+#         with:
+#           access_token: $ {{github.token}}
+#       - uses: actions/checkout@v3
+#         with:
+#           fetch-depth: 0
+#       - uses: actions/setup-node@v3
+#         with:
+#           node-version: 14
+#       - name: Install Dependencies
+#         # run: npm install --no-audit --no-fund --no-optional
+#         run: npm ci
+#       - name: Start EsLint
+#         run: npm run eslint
+#       - name: Build project
+#         run: npm run build
+#       - name: Run Tests
+#         run: npm run test
+#       - name: E2E Tests
+#         uses: cypress-io/github-action@v2
+#         with:
+#           command: npm run test:e2e
+#           start: npm run start-test
+#           wait-on: http://localhost:5000
+#       - name: Deploy to Heroku
+#         if: ${{ github.event_name == 'push'}}
+#         uses: akhileshns/heroku-deploy@v3.12.12
+#         with:
+#           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+#           heroku_app_name: ${{secrets.HEROKU_APP}}
+#           heroku_email: ${{secrets.HEROKU_API_EMAIL}}
+#           healthcheck: "https://${{secrets.HEROKU_APP}}.herokuapp.com/health"
+#           rollbackonhealthcheckfailed: true
 
 
