@@ -2,8 +2,10 @@ name: Deployment Pipeline
 
 on:
   push:
-    branches:
-      - devs
+    branches: [devs]
+  pull_request:
+    branches: [devs]
+    types: [opened,synchronize]
 
 jobs:
    deploy:
